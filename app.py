@@ -1,18 +1,27 @@
-import pymongo
+import logging
 
 from aiogram import executor
 
-from config import Config
+from mongo_client import MongoClient
 from tg_bot import TgBot
+from config import Config
 
 def main() -> None:
   config_object = Config()
-  tg_bot = TgBot(config_object)
 
-  executor.start_polling(
-    tg_bot.dispatcher, 
-    skip_updates=True
-  )
+  try:
+    mongo_client = MongoClient(config_object)
+    tg_bot = TgBot(config_object)
+
+    print(mongo_client.test())
+
+    executor.start_polling(
+      tg_bot.dispatcher, 
+      skip_updates=True
+    )
+
+  except Exception as ex:
+    logging.exception(f"{ex}")
 
 if __name__ == '__main__':
   main()
