@@ -6,6 +6,12 @@ from mongo_client import MongoClient
 from tg_bot import TgBot
 from config import Config
 
+"""
+  Main function, responsible for:
+  - Loading configuration
+  - Setting up mongo client instance
+  - Running the Telegram bot
+"""
 def main() -> None:
   config_object = Config()
 
@@ -21,5 +27,6 @@ def main() -> None:
   except Exception as ex:
     logging.exception(f"{ex}")
 
+# application entrypoint
 if __name__ == '__main__':
   main()

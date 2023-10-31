@@ -7,15 +7,43 @@ from mongo_client import MongoClient
 from config import Config
 
 class TgBot:
+  """
+  Telegram bot class
+
+  Attributes:
+    __bot_object (aiogram.Bot): Telegram bot object
+    __dispatcher (aiogram.Dispatcher): Dispatcher object for handling bot messages
+    __mongo_client (MongoClient): MongoDB client object
+  """
+
+  """
+  Getter for the __dispatcher attribute
+
+  Returns:
+    Dispatcher: The Dispatcher object
+  """
   @property
   def dispatcher(self):
     return self.__dispatcher
 
+  """
+  TgBot class constructor
+
+  Args:
+    mongo_client (MongoClient): MongoDB client object
+    config (Config): Configuration object
+  """
   def __init__(self, mongo_client: MongoClient, config: Config) -> None:
     self.__bot_object = Bot(token=config.tg_bot_token)
     self.__dispatcher = Dispatcher(self.__bot_object)
     self.__mongo_client = mongo_client
 
+    """
+    Handler for '/start' and '/help' commands
+
+    Args:
+      message (types.Message): Incoming message object
+    """
     @self.__dispatcher.message_handler(commands=['start', 'help'])
     async def send_welcome(message: types.Message) -> None:
       await message.reply(
@@ -23,11 +51,18 @@ class TgBot:
         parse_mode="MarkdownV2"
       )
     
+    """
+    Handler for incoming messages
+
+    Args:
+      message (types.Message): Incoming message object
+    """
     @self.__dispatcher.message_handler()
     async def message_handler(message: types.Message):
       try:
         json_object = json.loads(message.text)
 
+        # basic sanity check..
         if type(json_object) is not dict or \
           not "dt_from" in json_object.keys():
             raise ValueError(message.text)
@@ -47,6 +82,7 @@ class TgBot:
           parse_mode="MarkdownV2"
         )
 
+      # handle invalid user input by saying whats exactly wrong..
       except ValueError as ex:
         logging.warning(f"got invalid input data: {ex}")
 
@@ -57,6 +93,7 @@ class TgBot:
           parse_mode="MarkdownV2"
         )
 
+      # oops.. seems like we hit telegram's message limits
       except BadRequest as ex:
         logging.error(ex)
 
