@@ -1,10 +1,16 @@
-import pymongo
+import pymongo, config
 
 def main() -> None:
-  connection = pymongo.MongoClient("localhost", 27017, connectTimeoutMS=5000)
-  collection = connection["db"]["sample_collection"]
+  config_object = config.Config()
+
+  connection = pymongo.MongoClient(
+    config_object.mongo_host, 
+    config_object.mongo_port, 
+    connectTimeoutMS=5000
+  )
+
+  collection = connection[config_object.database_name][config_object.collection_name]
   print(collection.find_one())
-  # raise NotImplementedError("Nothing is implemented yet:(")
 
 if __name__ == '__main__':
   main()
