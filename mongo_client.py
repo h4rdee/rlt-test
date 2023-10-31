@@ -32,7 +32,7 @@ class MongoClient:
         self.__collection = self.__get_collection(config_object.collection_name)
 
     except Exception as ex:
-      logging.exception(f"{ex}")
+      logging.exception(ex)
       self.__connection.close()
 
   def test(self) -> dict:
