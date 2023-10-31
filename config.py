@@ -79,7 +79,7 @@ class Config:
         os.path.join(
           os.getcwd(),
           "rlt-test",
-          "config.json",
+          "config.json"
         ), "r"
       ) as f:
         json_object = json.load(f)
