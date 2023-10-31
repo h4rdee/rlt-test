@@ -58,3 +58,7 @@ class Config:
     self.__collection_name = "sample_collection" \
       if not "collection_name" in json_object \
         else json_object["collection_name"]
+
+    self.__tg_bot_token = "" \
+      if not "tg_bot_token" in json_object \
+        else json_object["tg_bot_token"]
