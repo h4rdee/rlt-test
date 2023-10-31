@@ -11,13 +11,7 @@ def main() -> None:
 
   try:
     mongo_client = MongoClient(config_object)
-    tg_bot = TgBot(config_object)
-
-    print(mongo_client.get_aggregated_data(
-      "2022-09-01T00:00:00",
-      "2022-12-31T23:59:00",
-      "month"
-    ))
+    tg_bot = TgBot(mongo_client, config_object)
 
     executor.start_polling(
       tg_bot.dispatcher, 
