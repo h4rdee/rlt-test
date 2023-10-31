@@ -1,16 +1,18 @@
-import pymongo, config
+import pymongo
+
+from aiogram import executor
+
+from config import Config
+from tg_bot import TgBot
 
 def main() -> None:
-  config_object = config.Config()
+  config_object = Config()
+  tg_bot = TgBot(config_object)
 
-  connection = pymongo.MongoClient(
-    config_object.mongo_host, 
-    config_object.mongo_port, 
-    connectTimeoutMS=5000
+  executor.start_polling(
+    tg_bot.dispatcher, 
+    skip_updates=True
   )
-
-  collection = connection[config_object.database_name][config_object.collection_name]
-  print(collection.find_one())
 
 if __name__ == '__main__':
   main()
