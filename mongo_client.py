@@ -141,7 +141,7 @@ class MongoClient:
       we gonna do that classic way..
       """
       if group_type == "hour":
-        grouping['$group']['_id']['$dateToString']['format'] = "%Y-%m-%d %HT00:00:00"
+        grouping['$group']['_id']['$dateToString']['format'] = "%Y-%m-%dT%H:00:00"
 
       elif group_type == "day":
         grouping['$group']['_id']['$dateToString']['format'] = "%Y-%m-%dT00:00:00"
