@@ -5,10 +5,11 @@ Salaries aggregation Telegram bot, implemented using `mongodb` and `aiogram`
 You can run this bot either locally or by using Docker container
 
 ## Running via Docker container
-1. **Build** Docker image <br>
+1. **Clone** this repository
+2. **Build** Docker image <br>
    `docker build -t rlt-test .`
 
-2. **Run** it! <br>
+3. **Run** it! <br>
    `docker run -d --name=rlt-test-container -p 5000:5000 -e TG_BOT_TOKEN="YOUR_TG_BOT_TOKEN_HERE" rlt-test`
 
 ## Running locally
