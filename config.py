@@ -78,7 +78,6 @@ class Config:
       with open(
         os.path.join(
           os.getcwd(),
-          "rlt-test",
           "config.json"
         ), "r"
       ) as f:
