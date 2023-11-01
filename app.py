@@ -25,7 +25,7 @@ def main() -> None:
     )
 
   except Exception as ex:
-    logging.exception(f"{ex}")
+    logging.exception(ex)
 
 # application entrypoint
 if __name__ == '__main__':
