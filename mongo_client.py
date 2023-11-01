@@ -1,5 +1,5 @@
 import pymongo, logging
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 class MongoClient:
   """
@@ -75,6 +75,28 @@ class MongoClient:
     except Exception as ex:
       logging.exception(ex)
       self.__connection.close()
+  
+  """
+  Fills missing database entries
+
+  Args:
+    dt_from (str): The start time of the time range in ISO-8601 format
+    dt_upto (str): The end time of the time range in ISO-8601 format
+
+  Returns:
+    Nothing
+  """
+  def __fill_missing_dates(self, dt_from: str, dt_upto: str) -> None:
+    date_from = datetime.strptime(dt_from, "%Y-%m-%dT%H:%M:%S")
+    date_upto = datetime.strptime(dt_upto, "%Y-%m-%dT%H:%M:%S")
+    current_date = date_from
+
+    while current_date <= date_upto:
+        # Check if a document for the current date exists
+        if self.__collection.count_documents({'dt': current_date}) == 0:
+            # Insert a dummy document for the missing date
+            self.__collection.insert_one({'dt': current_date, 'value': 0})
+        current_date += timedelta(days=1)
 
   """
   Aggregates data from a MongoDB collection based on the given time range and group type
@@ -132,6 +154,8 @@ class MongoClient:
         grouping['$group']['_id']['$dateToString']['format'] = "%Y-%m-01T00:00:00"
   
       return grouping
+
+    self.__fill_missing_dates(dt_from, dt_upto)
 
     # setup the MongoDB aggregation pipeline
     pipeline = [
